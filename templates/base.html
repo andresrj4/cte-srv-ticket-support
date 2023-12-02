@@ -36,7 +36,7 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Settings - WIP</a></li>
+                            <li><a class="dropdown-item" href="{% url 'change-password' %}">Change Password</a></li>
                         </ul>
                     </li>
                     {% elif request.user.is_engineer %}
@@ -51,7 +51,7 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Settings - WIP</a></li>
+                            <li><a class="dropdown-item" href="#">Change Password</a></li>
                         </ul>
                     </li>
                     {% endif %}
