@@ -24,3 +24,5 @@ def dashboard(request):
         return render(request, 'dashboard/engineer_dashboard.html', context)
     elif request.user.is_superuser:
         return render(request, 'dashboard/admin_dashboard.html')
+        
+        

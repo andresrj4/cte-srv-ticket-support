@@ -6,3 +6,4 @@ class User(AbstractUser):
     is_engineer = models.BooleanField(default=False)
     email = models.EmailField(unique=True)
 
+    

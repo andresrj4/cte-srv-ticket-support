@@ -24,7 +24,7 @@ def create_ticket(request):
                     # sends email to customer (console)
                     subject = f'{var.ticket_title} #{var.ticket_id}'
                     message = 'Thanks you for submiting a ticket, we will assign an engineer soon.'
-                    email_from = 'jimmy@email.com'
+                    email_from = 'microtech@email.com'
                     recipient_list = [request.user.email, ]
                     send_mail(subject, message, email_from, recipient_list)
                     messages.success(request, 'Your ticket has been submitted. An engineer will reach out soon.')

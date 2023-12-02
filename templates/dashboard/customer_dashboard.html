@@ -4,7 +4,7 @@
 <div class="p-5 mb-4 bg-light rounder-3">
     <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Welcome, {{request.user.email}}</h1>
-        <p class="col-md-8 fs-4">If you would like to open a ticket regarding an issue, feel free to contact us.</p>
+        <p class="col-md-8 fs-4">If you have an issue, feel free to open a ticket.</p>
         <a href="{% url 'create-ticket' %}" class="btn btn-primary btn-lg" type="button">Open Ticket</a>
     </div>
 </div>
