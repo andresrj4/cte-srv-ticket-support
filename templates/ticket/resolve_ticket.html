@@ -36,26 +36,35 @@
     </div>
 </div>
 
-{% if ticket.is_resolved %}
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Resolution Steps</h5>
-            {{ ticket.resolution_steps }}
-        </div>
-    </div>
-{% else %}
-    {% if not ticket.is_resolved and request.user.is_engineer %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Resolution Steps</h5>
         <form action="{% url 'resolve-ticket' ticket.ticket_id %}" method="POST">
             {% csrf_token %}
+            <div class="mb-3">
+                <label for="resolution_steps" class="form-label">Here's how the issue was resolved</label>
+                <textarea class="form-control" id="resolution_steps" name="rs" rows="3"></textarea>
+            </div>
 
-            <!-- Show/hide form fields based on button click -->
-            {% if request.POST and 'mark_resolved' in request.POST %}
-                {{ inventory_form.as_p }}
-            {% endif %}
+            <!-- Inventory Dropdown -->
+            <div class="mb-3">
+                <label for="id_inventory_item">Select Inventory Item:</label>
+                <select class="form-select" name="inventory_item" id="id_inventory_item" required>
+                    {% for item in inventory_items %}
+                        <option value="{{ item.id }}">{{ item.name }} - Quantity: {{ item.quantity }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-            <button type="submit" class="btn btn-primary" name="mark_resolved">Mark As Resolved</button>
+            <!-- Quantity Used Input -->
+            <div class="mb-3">
+                <label for="quantity_used" class="form-label">Quantity Used:</label>
+                <input type="number" class="form-control" id="quantity_used" name="quantity_used" min="1" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Mark As Resolved</button>
         </form>
-    {% endif %}
-{% endif %}
+    </div>
+</div>
 
 {% endblock content %}

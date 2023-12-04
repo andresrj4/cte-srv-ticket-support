@@ -1,5 +1,6 @@
 from django import forms
-from .models import Ticket
+from .models import Ticket, InventoryItem
+
 
 class CreateTicketForm(forms.ModelForm):
     class Meta:
@@ -10,3 +11,8 @@ class AssignTicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
         fields = ['engineer','severity']
+
+class TicketResolutionForm(forms.Form):
+    rs = forms.CharField(widget=forms.Textarea, label="Resolution Steps", required=False)
+    inventory_item = forms.ModelChoiceField(queryset=InventoryItem.objects.all(), label="Select Inventory Item")
+    quantity_used = forms.IntegerField(label="Quantity Used", required=False)
