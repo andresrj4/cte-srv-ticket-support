@@ -31,8 +31,10 @@
                             Tickets
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{% url 'customer-active-tickets' %}">Active Tickets</a></li>
-                            <li><a class="dropdown-item" href="{% url 'customer-resolved-tickets' %}">Resolved Tickets </a></li>
+                            <li><a class="dropdown-item" href="{% url 'customer-active-tickets' %}">Active Tickets</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'customer-resolved-tickets' %}">Resolved Tickets
+                                </a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -46,8 +48,10 @@
                             Tickets
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{% url 'engineer-active-tickets' %}">Active Tickets</a></li>
-                            <li><a class="dropdown-item" href="{% url 'engineer-resolved-tickets' %}">Resolved Tickets </a></li>
+                            <li><a class="dropdown-item" href="{% url 'engineer-active-tickets' %}">Active Tickets</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'engineer-resolved-tickets' %}">Resolved Tickets
+                                </a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -55,12 +59,24 @@
                         </ul>
                     </li>
                     {% endif %}
-                    {% if request.user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#" tableindex="-1" aria-disabled="true">{{request.user.email}}</a>
+                    {% if request.user.is_staff %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Inventory
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'view-inventory' %}">View Inventory</a></li>
+                            <li><a class="dropdown-item" href="{% url 'add-inventory-item' %}">Add Item </a></li>
+                        </ul>
                     </li>
                     {% endif %}
-                    
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tableindex="-1"
+                            aria-disabled="true">{{request.user.email}}</a>
+                    </li>
+                    {% endif %}
                 </ul>
                 <a href="{% url 'logout' %}" class="btn btn-warning btn-sm">Logout</a>
             </div>

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from inventory.models import InventoryItem
 
 User = get_user_model()
 
@@ -16,3 +17,8 @@ class Ticket(models.Model):
     severity = models.CharField(max_length=5, choices=(('1','1'),('2','2'),('3','3')), null=True, blank=True)
     is_assigned_to_engineer = models.BooleanField(default=False)
     resolution_steps = models.TextField(blank=True, null=True)
+    inventory_item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, null=True, blank=True)
+
+class InventoryItemTicket(models.Model):
+    name = models.CharField(max_length=255)
+    quantity = models.IntegerField(default=0)

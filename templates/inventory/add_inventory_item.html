@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Add Inventory Item</h2>
+<form method="post" action="{% url 'add-inventory-item' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Add Item</button>
+</form>
+
+{% endblock content %}

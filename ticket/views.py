@@ -1,12 +1,13 @@
 import random
 import string
 from django.db import IntegrityError
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from .form import CreateTicketForm, AssignTicketForm
+from .form import CreateTicketForm, AssignTicketForm, TicketResolutionForm
 from .models import Ticket
+from inventory.models import InventoryItem
 
 User = get_user_model()
 
@@ -97,12 +98,36 @@ def ticket_queue(request):
     return render(request, 'ticket/ticket_queue.html', context)
 
 def resolve_ticket(request, ticket_id):
-    ticket = Ticket.objects.get(ticket_id=ticket_id)
+    ticket = get_object_or_404(Ticket, ticket_id=ticket_id)
+    inventory_items = InventoryItem.objects.all()
+
     if request.method == 'POST':
-        rs = request.POST.get('rs')
-        ticket.resolution_steps = rs
-        ticket.is_resolved = True
-        ticket.status = 'Resolved'
-        ticket.save()
-        messages.success(request, 'Ticket has been marked as resolved and closed.')
-        return redirect('dashboard')
+        form = TicketResolutionForm(request.POST)
+        if form.is_valid():
+            rs = form.cleaned_data['rs']
+            inventory_item_id = form.cleaned_data['inventory_item'].id  # Extract the ID directly
+            quantity_used = form.cleaned_data['quantity_used']
+
+            inventory_item = get_object_or_404(InventoryItem, id=inventory_item_id)
+
+            if inventory_item.quantity < quantity_used:
+                messages.warning(request, 'Not enough quantity in inventory for the selected item.')
+                return redirect('ticket-details', ticket_id=ticket_id)
+
+            # Update the inventory item quantity
+            inventory_item.quantity -= quantity_used
+            inventory_item.save()
+
+            # Update the ticket resolution
+            ticket.resolution_steps = rs
+            ticket.is_resolved = True
+            ticket.status = 'Resolved'
+            ticket.save()
+
+            messages.success(request, 'Ticket has been marked as resolved and closed.')
+            return redirect('dashboard')
+    else:
+        form = TicketResolutionForm()
+
+    context = {'ticket': ticket, 'inventory_items': inventory_items, 'form': form}
+    return render(request, 'ticket/resolve_ticket.html', context)
