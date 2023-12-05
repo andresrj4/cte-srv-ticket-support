@@ -18,7 +18,14 @@ class Ticket(models.Model):
     is_assigned_to_engineer = models.BooleanField(default=False)
     resolution_steps = models.TextField(blank=True, null=True)
     inventory_item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, null=True, blank=True)
+    survey_completed = models.BooleanField(default=False)
 
 class InventoryItemTicket(models.Model):
     name = models.CharField(max_length=255)
     quantity = models.IntegerField(default=0)
+
+class SurveyResponse(models.Model):
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    satisfaction_score = models.IntegerField()
+    comments = models.TextField()
