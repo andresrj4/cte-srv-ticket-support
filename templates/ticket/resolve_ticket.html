@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row p-5 mb-4 bg-light rounded-3">
+    <div class="col-md-8">
+        <div class=" py-5">
+            <h1 class="display-6 fw-bold">{{ ticket.ticket_title }}</h1>
+            <p class="">{{ ticket.ticket_description }}</p>
+            {% if ticket.status == 'Pending' %}
+                <span class="badge bg-warning">Pending</span>
+            {% elif ticket.status == 'Active' %}
+                <span class="badge bg-success">Active</span>
+            {% elif ticket.status == 'Resolved' %}
+                <span class="badge bg-danger">Resolved</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="py-5">
+                    <h2 class="display-6">Useful info</h2>
+                    <p>Customer Information</p>
+                    <ul class="icon-list">
+                        <li><b>Ticket ID: #{{ ticket.ticket_id }}</b></li>
+                        <li><b>Customer: </b>{{ ticket.customer }}</li>
+                        <li><b>Engineer: </b>{{ ticket.engineer }}</li>
+                        <li><b>Created On: </b>{{ ticket.created_on }}</li>
+                        <li><b>Severity: {{ ticket.severity }}</b></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Resolution Steps</h5>
+        <form action="{% url 'resolve-ticket' ticket.ticket_id %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="resolution_steps" class="form-label">Here's how the issue was resolved</label>
+                <textarea class="form-control" id="resolution_steps" name="rs" rows="3"></textarea>
+            </div>
+
+            <!-- Inventory Dropdown -->
+            <div class="mb-3">
+                <label for="id_inventory_item">Select Inventory Item:</label>
+                <select class="form-select" name="inventory_item" id="id_inventory_item" required>
+                    {% for item in inventory_items %}
+                        <option value="{{ item.id }}">{{ item.name }} - Quantity: {{ item.quantity }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Quantity Used Input -->
+            <div class="mb-3">
+                <label for="quantity_used" class="form-label">Quantity Used:</label>
+                <input type="number" class="form-control" id="quantity_used" name="quantity_used" min="1" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Mark As Resolved</button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'accounts',
     'dashboard',
     'ticket',
+    'inventory',
     'templates',
     
     'widget_tweaks'

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Customer Satisfaction Survey for Ticket #{{ ticket.ticket_id }}</h2>
+
+<form method="post" action="{% url 'survey' ticket_id=ticket.ticket_id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Submit Survey</button>
+</form>
+
+{% endblock content %}
